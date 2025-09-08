@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Vendas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sistema de Vendas</h1>
+            <p class="subtitle">Gerencie seus produtos, clientes e vendas de forma eficiente</p>
+        </header>
+
+        <div class="dashboard">
+            <!-- Card de Produtos -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon produtos-icon">📦</div>
+                    <div>
+                        <h2>Produtos</h2>
+                        <p class="card-description">Gerenciar produtos e estoque</p>
+                    </div>
+                </div>
+                <button class="btn" onclick="showModal('produtoModal')">Novo Produto</button>
+                <button class="btn btn-secondary" onclick="showProductList()">Ver Produtos</button>
+            </div>
+
+            <!-- Card de Clientes -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon clientes-icon">👥</div>
+                    <div>
+                        <h2>Clientes</h2>
+                        <p class="card-description">Gerenciar cadastro de clientes</p>
+                    </div>
+                </div>
+                <button class="btn" onclick="showModal('clienteModal')">Novo Cliente</button>
+                <button class="btn btn-secondary" onclick="showClientList()">Ver Clientes</button>
+            </div>
+
+            <!-- Card de Vendas -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon vendas-icon">💰</div>
+                    <div>
+                        <h2>Vendas</h2>
+                        <p class="card-description">Registrar e consultar vendas</p>
+                    </div>
+                </div>
+                <button class="btn" onclick="showModal('vendaModal')">Nova Venda</button>
+                <button class="btn btn-secondary" onclick="showSalesList()">Ver Vendas</button>
+            </div>
+        </div>
+
+        <!-- Estatísticas -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalProdutos">0</div>
+                <div class="stat-label">Produtos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalClientes">0</div>
+                <div class="stat-label">Clientes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalVendas">0</div>
+                <div class="stat-label">Vendas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="faturamento">R$ 0,00</div>
+                <div class="stat-label">Faturamento</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Produto -->
+    <div id="produtoModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Cadastrar Produto</h2>
+            <form id="produtoForm">
+                <div class="form-group">
+                    <label for="produto-nome">Nome do Produto:</label>
+                    <input type="text" id="produto-nome" name="nome" required placeholder="Digite o nome do produto">
+                </div>
+                <div class="form-group">
+                    <label for="produto-preco">Preço:</label>
+                    <input type="number" id="produto-preco" step="0.01" name="preco" required placeholder="0,00" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="produto-estoque">Quantidade em Estoque:</label>
+                    <input type="number" id="produto-estoque" name="estoque" required placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="produto-descricao">Descrição:</label>
+                    <textarea id="produto-descricao" name="descricao" rows="3" placeholder="Descrição opcional do produto"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn">Salvar Produto</button>
+                    <button type="button" class="btn btn-secondary" onclick="hideModal('produtoModal')">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Cliente -->
+    <div id="clienteModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Cadastrar Cliente</h2>
+            <form id="clienteForm">
+                <div class="form-group">
+                    <label for="cliente-nome">Nome:</label>
+                    <input type="text" id="cliente-nome" name="nome" required placeholder="Nome completo do cliente">
+                </div>
+                <div class="form-group">
+                    <label for="cliente-email">Email:</label>
+                    <input type="email" id="cliente-email" name="email" required placeholder="email@exemplo.com">
+                </div>
+                <div class="form-group">
+                    <label for="cliente-telefone">Telefone:</label>
+                    <input type="tel" id="cliente-telefone" name="telefone" placeholder="(11) 99999-9999">
+                </div>
+                <div class="form-group">
+                    <label for="cliente-endereco">Endereço:</label>
+                    <textarea id="cliente-endereco" name="endereco" rows="3" placeholder="Endereço completo do cliente"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn">Salvar Cliente</button>
+                    <button type="button" class="btn btn-secondary" onclick="hideModal('clienteModal')">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Venda -->
+    <div id="vendaModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Registrar Venda</h2>
+            <form id="vendaForm">
+                <div class="form-group">
+                    <label for="venda-cliente">Cliente:</label>
+                    <select id="venda-cliente" name="cliente" required>
+                        <option value="">Selecione um cliente</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="venda-produto">Produto:</label>
+                    <select id="venda-produto" name="produto" required>
+                        <option value="">Selecione um produto</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="venda-quantidade">Quantidade:</label>
+                    <input type="number" id="venda-quantidade" name="quantidade" min="1" required placeholder="1">
+                </div>
+                <div class="form-group">
+                    <label for="venda-data">Data da Venda:</label>
+                    <input type="date" id="venda-data" name="data" required>
+                </div>
+                <div class="form-group">
+                    <div class="valor-total">
+                        <strong>Valor Total: <span id="valorTotal">R$ 0,00</span></strong>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn">Registrar Venda</button>
+                    <button type="button" class="btn btn-secondary" onclick="hideModal('vendaModal')">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Lista (para exibir produtos, clientes e vendas) -->
+    <div id="listaModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close">&times;</span>
+            <h2 id="listaTitle">Lista</h2>
+            <div id="listaContent" class="lista-content">
+                <!-- Conteúdo será preenchido dinamicamente -->
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="hideModal('listaModal')">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé com informações -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Sistema de Vendas - Desenvolvido para facilitar sua gestão</p>
+            <div class="footer-actions">
+                <button class="btn-link" onclick="showAbout()">Sobre</button>
+                <button class="btn-link" onclick="exportData()">Exportar Dados</button>
+                <button class="btn-link" onclick="clearAllData()">Limpar Dados</button>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
