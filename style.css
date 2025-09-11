@@ -1,3 +1,97 @@
+/* Lista visual de produtos */
+.produtos-lista-visual {
+    margin: 40px auto 0 auto;
+    max-width: 900px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    padding: 24px 32px;
+}
+.produtos-lista-visual h2 {
+    color: #222;
+    font-size: 1.5em;
+    margin-bottom: 18px;
+}
+.produto-card-visual {
+    border: 1.5px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    background: #fafbfc;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+.produto-nome {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #333;
+}
+.produto-preco, .produto-estoque, .produto-desc {
+    color: #555;
+    font-size: 1em;
+    margin-top: 2px;
+}
+
+/* Banner Neutro */
+.banner-neutro {
+    width: 100vw;
+    min-height: 80px;
+    background: #f5f6fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+.banner-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px 0 24px 40px;
+}
+.banner-content .pik {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #222;
+    letter-spacing: 2px;
+}
+.banner-content .shopee {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #555;
+    margin-left: 8px;
+    letter-spacing: 2px;
+}
+.banner-desc {
+    color: #666;
+    font-size: 1.1em;
+    margin-top: 8px;
+    font-weight: 500;
+    text-shadow: none;
+}
+
+/* Rodapé Pik Shop */
+.footer-pik {
+    width: 100vw;
+    background: #fffbe7;
+    color: #ff9800;
+    text-align: center;
+    padding: 18px 0 12px 0;
+    font-size: 1em;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-top: 40px;
+    border-top: 2px solid #ff9800;
+}
+
+/* Pik Shopee Title */
+.pikshopee-title {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 2.8em;
+    color: #ff5722;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 0 #fff200, 2px 2px 0 #ff9800;
+}
 * {
     margin: 0;
     padding: 0;
@@ -50,18 +144,19 @@ h1 {
 }
 
 .card {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #fff;
+    border-radius: 18px;
+    padding: 28px 22px 22px 22px;
+    box-shadow: 0 6px 24px rgba(255, 152, 0, 0.10), 0 1.5px 6px rgba(0,0,0,0.04);
+    border: 2px solid #fff3e0;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 10px;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 32px rgba(255, 87, 34, 0.18), 0 2px 8px rgba(0,0,0,0.06);
+    border-color: #ff9800;
 }
 
 .card-header {
@@ -107,33 +202,63 @@ h1 {
 }
 
 .btn {
-    background: linear-gradient(45deg, #667eea, #764ba2);
-    color: white;
+    background: linear-gradient(90deg, #ff9800 0%, #ff5722 100%);
+    color: #fff;
     border: none;
-    padding: 12px 25px;
     border-radius: 8px;
-    cursor: pointer;
+    padding: 10px 20px;
     font-size: 1em;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-right: 8px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.10);
 }
 
 .btn:hover {
-    background: linear-gradient(45deg, #5a6fd8, #6a42a0);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(90deg, #ff5722 0%, #ff9800 100%);
+    color: #fff200;
+    box-shadow: 0 4px 16px rgba(255, 87, 34, 0.15);
 }
 
 .btn-secondary {
-    background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+    background: #fffbe7;
+    color: #ff9800;
+    border: 1.5px solid #ff9800;
     margin-left: 10px;
 }
 
 .btn-secondary:hover {
-    background: linear-gradient(45deg, #8395a0, #6d7a7d);
+    background: #ff9800;
+    color: #fff;
+}
+
+/* Responsividade Shopee */
+@media (max-width: 700px) {
+    .banner-shopee {
+        flex-direction: column;
+        min-height: 120px;
+        padding: 10px 0;
+    }
+    .banner-img {
+        height: 80px;
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+    .banner-title {
+        font-size: 1.5em;
+        margin-left: 0;
+    }
+    .banner-subtitle {
+        left: 20px;
+        bottom: 8px;
+        font-size: 1em;
+    }
+    .container {
+        padding: 8px;
+    }
 }
 
 .stats-grid {

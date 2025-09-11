@@ -3,6 +3,8 @@ let produtos = [];
 let clientes = [];
 let vendas = [];
 
+const API_URL = 'http://localhost:3000/api';
+
 // Funções de modal
 function showModal(modalId) {
     document.getElementById(modalId).style.display = 'block';
@@ -15,8 +17,113 @@ function hideModal(modalId) {
     document.getElementById(modalId).style.display = 'none';
 }
 
-// Event listeners para fechar modais
-document.addEventListener('DOMContentLoaded', function() {
+// Funções de formulário e integração backend
+function setupFormListeners() {
+    // Cadastro de produtos
+    document.getElementById('produtoForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const produto = {
+            name: formData.get('nome'),
+            price: parseFloat(formData.get('preco')),
+            estoque: parseInt(formData.get('estoque')),
+            descricao: formData.get('descricao') || ''
+        };
+        try {
+            const res = await fetch(`${API_URL}/products`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(produto)
+            });
+            if (!res.ok) throw new Error('Erro ao cadastrar produto');
+            await loadProdutos();
+            e.target.reset();
+            hideModal('produtoModal');
+            updateStats();
+            showSuccess('Produto cadastrado com sucesso!');
+        } catch (err) {
+            showError(err.message);
+        }
+    });
+
+    // Cadastro de clientes (mantém local)
+    document.getElementById('clienteForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const cliente = {
+            id: Date.now(),
+            nome: formData.get('nome'),
+            email: formData.get('email'),
+            telefone: formData.get('telefone') || '',
+            endereco: formData.get('endereco') || ''
+        };
+        clientes.push(cliente);
+        e.target.reset();
+        hideModal('clienteModal');
+        updateStats();
+        showSuccess('Cliente cadastrado com sucesso!');
+    });
+
+    // Registro de vendas
+    document.getElementById('vendaForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const produtoId = parseInt(formData.get('produto'));
+        const clienteId = parseInt(formData.get('cliente'));
+        const quantidade = parseInt(formData.get('quantidade'));
+        const data = formData.get('data');
+        const produto = produtos.find(p => p.id === produtoId);
+        const cliente = clientes.find(c => c.id === clienteId);
+        if (!produto || !cliente) {
+            showError('Produto ou cliente inválido!');
+            return;
+        }
+        if (quantidade > 9999) {
+            showError('Quantidade inválida!');
+            return;
+        }
+        try {
+            const res = await fetch(`${API_URL}/sales`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items: [{ produtoId, clienteId, quantidade, data }] })
+            });
+            if (!res.ok) throw new Error('Erro ao registrar venda');
+            await loadVendas();
+            e.target.reset();
+            hideModal('vendaModal');
+            updateStats();
+            showSuccess('Venda registrada com sucesso!');
+        } catch (err) {
+            showError(err.message);
+        }
+    });
+}
+
+// Carregar produtos do backend
+async function loadProdutos() {
+    try {
+        const res = await fetch(`${API_URL}/products`);
+        produtos = await res.json();
+        renderProdutosListaVisual();
+    } catch {
+        produtos = [];
+        renderProdutosListaVisual();
+    }
+}
+
+// Carregar vendas do backend
+async function loadVendas() {
+    try {
+        const res = await fetch(`${API_URL}/sales`);
+        vendas = await res.json();
+    } catch {
+        vendas = [];
+    }
+}
+
+// Inicialização única
+document.addEventListener('DOMContentLoaded', async function() {
     // Event listeners para botões de fechar
     document.querySelectorAll('.close').forEach(closeBtn => {
         closeBtn.onclick = function() {
@@ -39,94 +146,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Event listeners para formulários
     setupFormListeners();
+
+    // Carregar dados do backend
+    await loadProdutos();
+    await loadVendas();
+    updateStats();
+    renderProdutosListaVisual();
 });
 
-// Configurar event listeners dos formulários
-function setupFormListeners() {
-    // Cadastro de produtos
-    document.getElementById('produtoForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        
-        const produto = {
-            id: Date.now(),
-            nome: formData.get('nome'),
-            preco: parseFloat(formData.get('preco')),
-            estoque: parseInt(formData.get('estoque')),
-            descricao: formData.get('descricao') || ''
-        };
-        
-        produtos.push(produto);
-        e.target.reset();
-        hideModal('produtoModal');
-        updateStats();
-        showSuccess('Produto cadastrado com sucesso!');
-    });
-
-    // Cadastro de clientes
-    document.getElementById('clienteForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        
-        const cliente = {
-            id: Date.now(),
-            nome: formData.get('nome'),
-            email: formData.get('email'),
-            telefone: formData.get('telefone') || '',
-            endereco: formData.get('endereco') || ''
-        };
-        
-        clientes.push(cliente);
-        e.target.reset();
-        hideModal('clienteModal');
-        updateStats();
-        showSuccess('Cliente cadastrado com sucesso!');
-    });
-
-    // Registro de vendas
-    document.getElementById('vendaForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const produtoId = parseInt(formData.get('produto'));
-        const quantidade = parseInt(formData.get('quantidade'));
-        
-        const produto = produtos.find(p => p.id === produtoId);
-        
-        if (!produto) {
-            showError('Produto não encontrado!');
-            return;
-        }
-        
-        if (produto.estoque < quantidade) {
-            showError('Estoque insuficiente! Disponível: ' + produto.estoque);
-            return;
-        }
-
-        const venda = {
-            id: Date.now(),
-            clienteId: parseInt(formData.get('cliente')),
-            produtoId: produtoId,
-            quantidade: quantidade,
-            data: formData.get('data'),
-            total: produto.preco * quantidade
-        };
-
-        // Atualizar estoque
-        produto.estoque -= quantidade;
-        
-        vendas.push(venda);
-        e.target.reset();
-        hideModal('vendaModal');
-        updateStats();
-        showSuccess('Venda registrada com sucesso!');
-        
-        // Definir data atual novamente
-        const dataInput = document.querySelector('input[name="data"]');
-        if (dataInput) {
-            dataInput.valueAsDate = new Date();
-        }
-    });
-}
 
 // Popular selects do modal de venda
 function populateSelects() {
@@ -152,6 +179,24 @@ function populateSelects() {
         option.textContent = `${produto.nome} (Estoque: ${produto.estoque}) - R$ ${produto.preco.toFixed(2)}`;
         produtoSelect.appendChild(option);
     });
+}
+
+// Renderizar lista visual de produtos
+function renderProdutosListaVisual() {
+    const container = document.getElementById('produtos-lista-container');
+    if (!container) return;
+    if (!produtos || produtos.length === 0) {
+        container.innerHTML = '<p style="color:#888">Nenhum produto cadastrado ainda.</p>';
+        return;
+    }
+    container.innerHTML = produtos.map(produto => `
+        <div class="produto-card-visual">
+            <div class="produto-nome">${produto.name || produto.nome}</div>
+            <div class="produto-preco">Preço: R$ ${(produto.price || produto.preco).toFixed(2)}</div>
+            <div class="produto-estoque">Estoque: ${produto.estoque !== undefined ? produto.estoque : '-'}</div>
+            <div class="produto-desc">${produto.descricao || ''}</div>
+        </div>
+    `).join('');
 }
 
 // Atualizar estatísticas
@@ -293,7 +338,3 @@ function exportData() {
     showSuccess('Dados exportados com sucesso!');
 }
 
-// Inicializar estatísticas quando a página carregar
-document.addEventListener('DOMContentLoaded', function() {
-    updateStats();
-});

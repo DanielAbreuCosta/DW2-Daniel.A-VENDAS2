@@ -4,13 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Vendas</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Banner Neutro -->
+    <div class="banner-neutro">
+        <div class="banner-content">
+            <span class="pik">Abreu</span><span class="shopee">Vendas</span>
+            <span class="banner-desc">Sua loja digital simples, bonita e eficiente</span>
+        </div>
+    </div>
+
     <div class="container">
         <header>
-            <h1>Sistema de Vendas</h1>
-            <p class="subtitle">Gerencie seus produtos, clientes e vendas de forma eficiente</p>
+            <h1 class="pikshopee-title">Abreu Vendas</h1>
+            <p class="subtitle">Gerencie seus produtos, clientes e vendas de forma eficiente, com visual de e-commerce!</p>
         </header>
 
         <div class="dashboard">
@@ -59,11 +67,6 @@
             <div class="stat-card">
                 <div class="stat-number" id="totalProdutos">0</div>
                 <div class="stat-label">Produtos</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="totalClientes">0</div>
-                <div class="stat-label">Clientes</div>
-            </div>
             <div class="stat-card">
                 <div class="stat-number" id="totalVendas">0</div>
                 <div class="stat-label">Vendas</div>
@@ -71,6 +74,14 @@
             <div class="stat-card">
                 <div class="stat-number" id="faturamento">R$ 0,00</div>
                 <div class="stat-label">Faturamento</div>
+            </div>
+                <div class="stat-label">Faturamento</div>
+
+        <!-- Lista visual de produtos cadastrados -->
+        <section id="produtos-lista-visual" class="produtos-lista-visual">
+            <h2>Produtos cadastrados</h2>
+            <div id="produtos-lista-container"></div>
+        </section>
             </div>
         </div>
     </div>
@@ -142,14 +153,14 @@
             <h2>Registrar Venda</h2>
             <form id="vendaForm">
                 <div class="form-group">
-                    <label for="venda-cliente">Cliente:</label>
-                    <select id="venda-cliente" name="cliente" required>
+                    <label for="clienteSelect">Cliente:</label>
+                    <select id="clienteSelect" name="cliente" required>
                         <option value="">Selecione um cliente</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="venda-produto">Produto:</label>
-                    <select id="venda-produto" name="produto" required>
+                    <label for="produtoSelect">Produto:</label>
+                    <select id="produtoSelect" name="produto" required>
                         <option value="">Selecione um produto</option>
                     </select>
                 </div>
@@ -193,13 +204,14 @@
         <div class="footer-content">
             <p>&copy; 2024 Sistema de Vendas - Desenvolvido para facilitar sua gestão</p>
             <div class="footer-actions">
-                <button class="btn-link" onclick="showAbout()">Sobre</button>
-                <button class="btn-link" onclick="exportData()">Exportar Dados</button>
-                <button class="btn-link" onclick="clearAllData()">Limpar Dados</button>
             </div>
         </div>
     </footer>
 
     <script src="script.js"></script>
+    <!-- Rodapé -->
+    <footer class="footer-pik">
+        © 2025 Abreu Vendas - Desenvolvido para facilitar sua gestão
+    </footer>
 </body>
 </html>
